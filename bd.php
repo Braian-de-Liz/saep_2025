@@ -12,5 +12,5 @@
         die("Falha na conexão : " . $conecao -> connect_error);
     }
 
-    $conecao->set_charset("utf8");
+    $conecao->set_charset("utf8"); 
 ?>
