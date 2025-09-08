@@ -27,6 +27,28 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     <a href="sair.php">
         <input type="button" value="sair" event="sair.php">
     </a>
+
+    <br><br>
+
+    <h2>Turmas</h2>
+
+    <br>
+
+    <a href="cadastrar.php">
+        <input type="button" value="cadastrar" event="cadastrar.php">
+    </a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Nome</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+    </table>
+
+
 </body>
 
 </html>
