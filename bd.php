@@ -1,10 +1,10 @@
 <?php 
-    $servidor = "localhost";
+    $host = "localhost";
     $usuario = "root";
     $senha = "root";
-    $banco = "saep_db";
+    $banco = "crud";
 
-    $conecao = new mysqli($servidor, $usuario, $senha, $banco);
+    $conecao = new mysqli($host, $usuario, $senha, $banco);
     
     // verificar erros de conexão
 

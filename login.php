@@ -1,65 +1,59 @@
-<?php 
-    require "bd.php";
-    session_start();
+<?php
+require "bd.php";
+session_start();
 
-    if (isset($_SESSION["email"])) {
-        header("location:turma.php");
+// Se já estiver logado, vai direto para a turma
+if (isset($_SESSION["nome_professor"])) {
+    header("Location: turma.php");
+    exit;
+}
+
+$erro = "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $email = trim($_POST["email"] ?? "");
+    $senha = trim($_POST["senha"] ?? "");
+
+    $stmt = $conn->prepare("SELECT id_professor, nome_professor, senha_professor FROM professor WHERE email_professor = ? AND senha_professor = ?");
+    $stmt->bind_param("ss", $email, $senha);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+
+    if ($resultado->num_rows === 1) {
+        $dados = $resultado->fetch_assoc();
+        $_SESSION["nome_professor"] = $dados["nome_professor"];
+        $_SESSION["professor_id"] = $dados["pk_professor"];
+        $_SESSION["conectado"] = true;
+        header("Location: turma.php");
         exit;
+    } else {
+        $erro = "E-mail ou senha inválidos.";
     }
-
-    $erro = "";
-
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        if (isset($_POST["login"])) {
-            $email = trim($_POST["email"] ?? "");
-            $senha = trim($_POST["senha"] ?? "");
-
-            $stmt = $conecao->prepare("SELECT * FROM professor WHERE email_professor = ?  AND senha_professor");
-            $stmt->bind_param("ss", $email, $senha);
-
-            $stmt->execute();
-
-            $resultado = $stmt->get_result();
-
-            if ($resultado -> num_rows === 1) {
-                $dados = $resultado->fetch_assoc();
-
-                $_SESSION['email'] = $dados['email_professor'];
-                $_SESSION['senha'] = $dados['senha_professor'];
-
-                header("Location: turma.php");
-                exit;
-            }
-            else{
-                $erro = "usuário ou senha inválida";
-            }
-        }
-    }
+}
 ?>
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
-    <h2>Login - SAEP</h2>
-    <form action="" method="POST">
-        <label for="">email</label>
-        <input type="email" name="usuario" required>
 
-        <label for="">Senha</label>
-        <input type="passoword" required>
+<head>
+    <meta charset="utf-8">
+    <title>Login - Professores</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h2>Login - Professores</h2>
+    <form method="post">
+        <label for="email">E-mail</label>
+        <input type="email" name="email" required>
+
+        <label for="senha">Senha</label>
+        <input type="password" name="senha" required>
 
         <button type="submit">Entrar</button>
-        <?php 
-            if ($erro) {
-                echo "<div> $erro </div>";
-            }
-        ?>
+        <?php if ($erro): ?>
+            <div class="erro"><?= htmlspecialchars($erro) ?></div>
+        <?php endif; ?>
     </form>
 </body>
-</html>
 
+</html>
