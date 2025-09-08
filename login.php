@@ -14,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $email = trim($_POST["email"] ?? "");
     $senha = trim($_POST["senha"] ?? "");
 
-    $stmt = $conn->prepare("SELECT id_professor, nome_professor, senha_professor FROM professor WHERE email_professor = ? AND senha_professor = ?");
+    $stmt = $conn->prepare("SELECT pk_professor, nome_professor, senha_professor FROM professor WHERE email_professor = ? AND senha_professor = ?");
     $stmt->bind_param("ss", $email, $senha);
     $stmt->execute();
     $resultado = $stmt->get_result();
