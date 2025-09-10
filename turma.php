@@ -2,7 +2,6 @@
 session_start();
 if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
     header("Location: login.php");
-
 }
 ?>
 
@@ -46,7 +45,26 @@ if (!isset($_SESSION["conectado"]) || $_SESSION["conectado"] !== true) {
                 <th>Ação</th>
             </tr>
         </thead>
+
+        <tbody>
+            <?php
+            include("listar_turmas.php");
+
+            if (!empty($turmas)) {
+                foreach($turmas as $turmaCada){
+                    echo '<tr>
+                    <td> ' . $linha['pk_turma'] . ' </td>
+                    <td> ' . $linha['nome_turma'] . ' </td>
+                    <td> <a href="excluir_turma.php?codigo=' . $linha['pk_turma'] . '"> <button>Excluir</button> </a> </td>
+                    <td> <a href="listar_atividades_turma.php?codigo=' . $linha['pk_turma'] . '"> <button>Atividades</button> </a> </td>
+                    </tr>
+                    ';
+                }
+            }
+            ?>
+        </tbody>
     </table>
+
 
 
 </body>
